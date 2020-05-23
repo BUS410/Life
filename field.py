@@ -1,11 +1,4 @@
-"""This is my little module that mimics natural selection.
-Python version 3.8.2, pygame version 1.9.6."""
-
-from random import randint
-
-import pygame
-
-SCREEN_WIDTH, SCREEN_HEIGHT = 1280, 720
+from . import pygame
 
 CELLS_COLOR = (255, 255, 255)
 
@@ -68,51 +61,3 @@ class Cell:
     def draw(self, filed: Field):
         pygame.draw.rect(filed, CELLS_COLOR,
                          (self.x, self.y, self.width, self.height))
-
-
-class Food:
-    """The food that organisms will eat"""
-
-    def __init__(self, x: int, y: int, energy: int = None):
-        self.pos = [x, y]
-        self.energy = energy or randint(0, 255)
-        assert 0 < energy <= 255
-
-        # color will depend on the amount of energy in food
-        self.color = (energy, 0, 255 - energy)
-
-    def draw(self, surface: pygame.Surface, cell: Cell):
-        pass
-
-    def __bool__(self):
-        return True
-
-
-class Organism:
-    """An organism that will eat and breed"""
-
-    def __init__(self):
-        pass
-
-    def update(self, field: Field):
-        pass
-
-    def draw(self, surface: pygame.Surface, cell):
-        pass
-
-    def __bool__(self):
-        return True
-
-
-class Program:
-    """The main class for playing a program"""
-
-    def __init__(self):
-        pygame.init()
-
-    def start(self):
-        pass
-
-
-if __name__ == '__main__':
-    pass
