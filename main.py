@@ -1,4 +1,4 @@
-"""This is my little module that mimics natural selection.
+"""This is my little program that mimics natural selection.
 Python version 3.8.2, pygame version 1.9.6."""
 
 import pygame
@@ -6,7 +6,12 @@ import pygame
 from field import Field
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 1366, 768
+WINDOW_BORDER = 0
 FULLSCREEN = pygame.FULLSCREEN  # 0 to non fullscreen
+
+UI_WIDTH = 0
+
+ROWS, COLS = 45, 80
 
 # colors
 BLACK = (0, 0, 0)
@@ -20,7 +25,9 @@ class Program:
         self.window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT),
                                               FULLSCREEN)
         pygame.display.set_caption('Life by BUS410')
-        self.field = Field(SCREEN_WIDTH, SCREEN_HEIGHT, 50, 50)
+        self.field = Field(SCREEN_WIDTH - UI_WIDTH - (WINDOW_BORDER * 2),
+                           SCREEN_HEIGHT - (WINDOW_BORDER * 2), COLS, ROWS)
+        self.field.update()
 
     def main(self):
         while True:
@@ -38,14 +45,23 @@ class Program:
             elif e.type == pygame.KEYUP:
                 if e.key == pygame.K_ESCAPE:
                     next_update = False
-        self.field.update()
+                elif e.key == pygame.K_p:
+                    self.field.put_food(COLS + ROWS)
+                    self.field.update()
+                elif e.key == pygame.K_c:
+                    self.field.clear()
+                    self.field.update()
+                elif e.key == pygame.K_o:
+                    self.field.put_live(1)
+                    self.field.update()
+
         self.draw()
 
         return next_update
 
     def draw(self):
         self.window.fill(BLACK)
-        self.field.draw(self.window)
+        self.field.draw(self.window, (WINDOW_BORDER + UI_WIDTH, WINDOW_BORDER))
         pygame.display.update()
 
 

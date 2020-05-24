@@ -1,5 +1,9 @@
-from pygame import draw
+from random import randint
+
+from pygame.draw import rect as draw_rect
 from pygame.surface import Surface
+
+from objects import Food, Organism
 
 CELLS_COLOR = (128, 128, 128)
 FIELD_COLOR = (64, 64, 64)
@@ -20,9 +24,32 @@ class Field:
         cell_height = height / rows
         for y in range(rows):
             for x in range(cols):
-                cell = Cell(self, x * cell_width, y * cell_height, cell_width,
-                            cell_height, border_width)
+                cell = Cell(self, (x, y), x * cell_width, y * cell_height,
+                            cell_width, cell_height, border_width)
                 self._rows[y].append(cell)
+
+    def put_live(self, count):
+        for i in range(count):
+            y = randint(0, len(self._rows) - 1)
+            x = randint(0, len(self._rows[0]) - 1)
+            cell = self._rows[y][x]
+            cell.obj = Organism(cell=cell,
+                                energy=randint(1, 255),
+                                visibility_range=randint(1, 5),
+                                speed=randint(1, 5),
+                                finicky=randint(1, 255))
+
+    def put_food(self, count):
+        for i in range(count):
+            y = randint(0, len(self._rows) - 1)
+            x = randint(0, len(self._rows[0]) - 1)
+            cell = self._rows[y][x]
+            cell.obj = Food(cell)
+
+    def clear(self):
+        for row in self._rows:
+            for cell in row:
+                cell.obj = None
 
     def update(self):
         self.surface.fill(FIELD_COLOR)
@@ -30,14 +57,6 @@ class Field:
             for cell in row:
                 cell.update()
                 cell.draw()
-
-    def get_objects(self):
-        res = []
-        for i, row in enumerate(self._rows):
-            res.append([])
-            for cell in row:
-                res[i].append(cell.obj)
-        return res
 
     def change_border_cells(self, width: int):
         for row in self._rows:
@@ -69,7 +88,9 @@ class Field:
 class Cell:
     """The cell for food and organisms of which the field will consist"""
 
-    def __init__(self, filed: Field, x, y, width, height, border_width: int):
+    def __init__(self, filed: Field, pos: tuple, x, y, width, height,
+                 border_width):
+        self.pos = pos
         self.filed = filed
         assert width > border_width and height > border_width
         self.x = x + border_width
@@ -82,12 +103,13 @@ class Cell:
         self.obj = obj
 
     def update(self):
-        if self.obj:
-            self.obj.update()
+        if self.obj and self.obj.is_organism:
+            self.obj.update(self.filed)
 
     def __str__(self):
         return f'Cell<{self.x=}, {self.y=}, {self.width=}, {self.height=}>'
 
     def draw(self):
-        draw.rect(self.filed.surface, CELLS_COLOR,
+        draw_rect(self.filed.surface,
+                  self.obj.color if self.obj else CELLS_COLOR,
                   (self.x, self.y, self.width, self.height))

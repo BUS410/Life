@@ -1,3 +1,3 @@
 # Life
 
-This is my little module that mimics natural selection.
+This is my little program that mimics natural selection.
