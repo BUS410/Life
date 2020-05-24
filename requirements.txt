@@ -1,0 +1,2 @@
+cPython==0.0.5
+pygame==1.9.6
