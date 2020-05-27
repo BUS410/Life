@@ -5,9 +5,9 @@ import pygame
 
 from field import Field
 
-SCREEN_WIDTH, SCREEN_HEIGHT = 1366, 768
+SCREEN_WIDTH, SCREEN_HEIGHT = 800, 500
 WINDOW_BORDER = 0
-FULLSCREEN = pygame.FULLSCREEN  # 0 to non fullscreen
+FULLSCREEN = 0  # 0 to non fullscreen
 
 UI_WIDTH = 0
 
@@ -53,6 +53,8 @@ class Program:
                     self.field.update()
                 elif e.key == pygame.K_o:
                     self.field.put_live(1)
+                    self.field.update()
+                elif e.key == pygame.K_u:
                     self.field.update()
 
         self.draw()

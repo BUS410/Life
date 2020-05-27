@@ -36,7 +36,6 @@ class Field:
             cell.obj = Organism(cell=cell,
                                 energy=randint(1, 255),
                                 visibility_range=randint(1, 5),
-                                speed=randint(1, 5),
                                 finicky=randint(1, 255))
 
     def put_food(self, count):
@@ -56,6 +55,9 @@ class Field:
         for row in self._rows:
             for cell in row:
                 cell.update()
+        for row in self._rows:
+            for cell in row:
+                cell.set_not_updated()
                 cell.draw()
 
     def change_border_cells(self, width: int):
@@ -71,10 +73,6 @@ class Field:
 
     def __len__(self):
         return len(self._rows)
-
-    def __iter__(self):
-        for row in self._rows:
-            yield row
 
     def __str__(self):
         res = ''
@@ -103,8 +101,12 @@ class Cell:
         self.obj = obj
 
     def update(self):
-        if self.obj and self.obj.is_organism:
+        if self.obj and self.obj.is_organism and not self.obj.updated:
             self.obj.update(self.filed)
+
+    def set_not_updated(self):
+        if self.obj and self.obj.is_organism:
+            self.obj.updated = False
 
     def __str__(self):
         return f'Cell<{self.x=}, {self.y=}, {self.width=}, {self.height=}>'
