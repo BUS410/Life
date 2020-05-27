@@ -102,7 +102,7 @@ class Cell:
 
     def update(self):
         if self.obj and self.obj.is_organism and not self.obj.updated:
-            self.obj.update(self.filed)
+            self.obj.update()
 
     def set_not_updated(self):
         if self.obj and self.obj.is_organism:

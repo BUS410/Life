@@ -6,12 +6,13 @@ import pygame
 from field import Field
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 500
+FPS = 60
 WINDOW_BORDER = 0
 FULLSCREEN = 0  # 0 to non fullscreen
 
 UI_WIDTH = 0
 
-ROWS, COLS = 45, 80
+ROWS, COLS = 50, 80
 
 # colors
 BLACK = (0, 0, 0)
@@ -28,11 +29,13 @@ class Program:
         self.field = Field(SCREEN_WIDTH - UI_WIDTH - (WINDOW_BORDER * 2),
                            SCREEN_HEIGHT - (WINDOW_BORDER * 2), COLS, ROWS)
         self.field.update()
+        self.clock = pygame.time.Clock()
 
     def main(self):
         while True:
             if not self.update():
                 break
+            self.clock.tick(FPS)
         pygame.quit()
 
     def update(self):
@@ -47,16 +50,14 @@ class Program:
                     next_update = False
                 elif e.key == pygame.K_p:
                     self.field.put_food(COLS + ROWS)
-                    self.field.update()
                 elif e.key == pygame.K_c:
                     self.field.clear()
-                    self.field.update()
                 elif e.key == pygame.K_o:
                     self.field.put_live(1)
-                    self.field.update()
                 elif e.key == pygame.K_u:
                     self.field.update()
 
+        self.field.update()
         self.draw()
 
         return next_update
