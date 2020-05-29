@@ -5,9 +5,10 @@ from random import randint, choice
 MIN_ENERGY = 64
 MAX_ENERGY = 255
 FOOD_ENERGY_FACTOR = 0.1
-MAX_VR = 5
+MAX_VR = 6
 MIN_VR = 2
 HUNGRY_SPEED = 2
+PREDATOR_PROBABILITY = 100
 
 
 def stabilize(n, maximum=MAX_ENERGY, minimum=1):
@@ -27,7 +28,7 @@ class Food:
         self.is_organism = False
 
         # color will depend on the amount of energy in food
-        self.color = (0, self.energy, 0)
+        self.color = (self.energy, self.energy, 0)
         self.updated = None
 
 
@@ -42,6 +43,10 @@ class Organism:
         self.color = (energy, 0, MAX_ENERGY - energy)
         self.is_organism = True
         self.updated = False
+        # if randint(0, PREDATOR_PROBABILITY) == PREDATOR_PROBABILITY:
+        #     self.is_predator = True
+        # else:
+        #     self.is_predator = False
 
     def die(self):
         self.cell.put(None)
@@ -60,7 +65,7 @@ class Organism:
     def update(self):
         field = self.cell.filed
         self.energy -= HUNGRY_SPEED
-        self.color = (self.energy, 0, MAX_ENERGY - self.energy)
+        self.color = (0, self.finicky, self.energy)
         if self.energy <= 0:
             self.die()
             return

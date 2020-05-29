@@ -5,7 +5,7 @@ from pygame.surface import Surface
 
 from objects import Food, Organism
 
-CELLS_COLOR = (128, 128, 128)
+CELLS_COLOR = (32, 32, 32)
 FIELD_COLOR = (64, 64, 64)
 
 
@@ -13,26 +13,36 @@ class Field:
     """Field consisting of cells"""
 
     def __init__(self, width: int, height: int, cols: int, rows: int,
-                 border_width=1):
+                 border_width=1, count_put_food=1):
         self.height = height
         self.width = width
         self.surface = Surface((width, height))
+        self.__i = 0
+        self.count_put_food = count_put_food
 
         # creating field cells
         self._rows = [[] for _ in range(rows)]
         cell_width = width / cols
         cell_height = height / rows
+        self.cell_width = cell_width
+        self.cell_height = cell_height
         for y in range(rows):
             for x in range(cols):
                 cell = Cell(self, (x, y), x * cell_width, y * cell_height,
                             cell_width, cell_height, border_width)
                 self._rows[y].append(cell)
 
-    def put_live(self, count):
+    def put_live(self, count=None, pos=None):
+        count = count or self.count_put_food
         for i in range(count):
-            y = randint(0, len(self._rows) - 1)
-            x = randint(0, len(self._rows[0]) - 1)
-            cell = self._rows[y][x]
+            if pos and count == 1:
+                x = int(pos[0] / self.cell_width)
+                y = int(pos[1] / self.cell_height)
+                cell = self._rows[y][x]
+            else:
+                y = randint(0, len(self._rows) - 1)
+                x = randint(0, len(self._rows[0]) - 1)
+                cell = self._rows[y][x]
             cell.obj = Organism(cell=cell,
                                 energy=randint(1, 255),
                                 visibility_range=randint(1, 5),
@@ -55,6 +65,7 @@ class Field:
         for row in self._rows:
             for cell in row:
                 cell.update()
+        self.put_food(self.count_put_food)
         for row in self._rows:
             for cell in row:
                 cell.set_not_updated()
@@ -70,6 +81,18 @@ class Field:
 
     def __getitem__(self, item):
         return self._rows[item]
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.__i + 1 == len(self._rows):
+            self.__i = 0
+            raise StopIteration
+        else:
+            res = self._rows[self.__i]
+            self.__i += 1
+            return res
 
     def __len__(self):
         return len(self._rows)
