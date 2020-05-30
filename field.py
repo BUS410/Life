@@ -22,6 +22,8 @@ class Field:
 
         # creating field cells
         self._rows = [[] for _ in range(rows)]
+        self.cols = cols
+        self.rows = rows
         cell_width = width / cols
         cell_height = height / rows
         self.cell_width = cell_width
@@ -40,8 +42,8 @@ class Field:
                 y = int(pos[1] / self.cell_height)
                 cell = self._rows[y][x]
             else:
-                y = randint(0, len(self._rows) - 1)
-                x = randint(0, len(self._rows[0]) - 1)
+                y = randint(0, self.rows - 1)
+                x = randint(0, self.cols - 1)
                 cell = self._rows[y][x]
             cell.obj = Organism(cell=cell,
                                 energy=randint(1, 255),
@@ -50,8 +52,8 @@ class Field:
 
     def put_food(self, count):
         for i in range(count):
-            y = randint(0, len(self._rows) - 1)
-            x = randint(0, len(self._rows[0]) - 1)
+            y = randint(0, self.rows - 1)
+            x = randint(0, self.cols - 1)
             cell = self._rows[y][x]
             cell.obj = Food(cell)
 

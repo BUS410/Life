@@ -6,11 +6,9 @@ import pygame
 from field import Field
 from ui import Widget
 
-SCREEN_WIDTH, SCREEN_HEIGHT = 1280, 720
 FPS = 60
 UPDATE_FREQUENCY = 5
 UI_WIDTH = 200
-ROWS, COLS = SCREEN_HEIGHT//20, (SCREEN_WIDTH - UI_WIDTH)//20
 MIN_ROWS_COLS = 3
 BUTTON_H = 50
 WINDOW_BACKGROUND = (0, 0, 0)
@@ -18,21 +16,21 @@ BUTTON_COLOR = (72, 72, 72)
 BUTTON_COVER = (64, 64, 64)
 BUTTON_CLICKED = (128, 128, 128)
 
-# 0 to non fullscreen, pygame.FULLSCREEN to fullscreen
-FULLSCREEN = pygame.FULLSCREEN
-
 
 class Program:
     """The main class for playing a program"""
 
-    def __init__(self):
+    def __init__(self, resolution=(1280, 720),
+                 fullscreen=True):
         pygame.init()
-        self.window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT),
-                                              FULLSCREEN)
+        fullscreen = pygame.FULLSCREEN if fullscreen else 0
+        self.resolution = resolution
+        self.window = pygame.display.set_mode(resolution, fullscreen)
         pygame.display.set_caption('Life by BUS410')
-        self.cols = COLS
-        self.rows = ROWS
-        self.field = Field(SCREEN_WIDTH - UI_WIDTH, SCREEN_HEIGHT, COLS, ROWS)
+        self.cols = resolution[0] // 20
+        self.rows = resolution[1] // 20
+        self.field = Field(resolution[0] - UI_WIDTH, resolution[1], self.cols,
+                           self.rows)
         self.field.update()
         self.update_iterator = UPDATE_FREQUENCY
         self.update_frequency = UPDATE_FREQUENCY
@@ -45,6 +43,7 @@ class Program:
                    width=UI_WIDTH,
                    height=BUTTON_H,
                    text='Старт/Стоп',
+                   background_color=BUTTON_COLOR,
                    onclick=self.start_stop,
                    background_color_cover=BUTTON_COVER,
                    background_color_click=BUTTON_CLICKED),
@@ -54,6 +53,7 @@ class Program:
                    height=BUTTON_H,
                    text='Очистить',
                    onclick=self.clear,
+                   background_color=BUTTON_COLOR,
                    background_color_cover=BUTTON_COVER,
                    background_color_click=BUTTON_CLICKED),
             Widget(x=0,
@@ -142,7 +142,7 @@ class Program:
                    background_color_click=BUTTON_CLICKED),
 
             Widget(x=0,
-                   y=SCREEN_HEIGHT-BUTTON_H,
+                   y=resolution[1] - BUTTON_H,
                    width=UI_WIDTH,
                    height=BUTTON_H,
                    text='Выход',
@@ -191,8 +191,9 @@ class Program:
                 self.rows -= n
             if self.cols > MIN_ROWS_COLS + n - 1:
                 self.cols -= n
-        self.field = Field(SCREEN_WIDTH - UI_WIDTH, SCREEN_HEIGHT,
-                           self.cols, self.rows)
+        self.field = Field(self.resolution[0] - UI_WIDTH, self.resolution[1],
+                           self.cols, self.rows,
+                           count_put_food=self.field.count_put_food)
         self.field.update()
 
     def main(self):
@@ -212,7 +213,7 @@ class Program:
                 if e.key == pygame.K_ESCAPE:
                     self.next_update = False
                 elif e.key == pygame.K_p:
-                    self.field.put_food(COLS + ROWS)
+                    self.field.put_food(self.field.cols + self.field.rows)
                     self.field.update()
                 elif e.key == pygame.K_c:
                     self.clear()
