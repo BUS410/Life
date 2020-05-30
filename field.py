@@ -19,6 +19,9 @@ class Field:
         self.surface = Surface((width, height))
         self.__i = 0
         self.count_put_food = count_put_food
+        self.organisms = 0
+        self.foods = 0
+        self.predators = 0
 
         # creating field cells
         self._rows = [[] for _ in range(rows)]
@@ -63,6 +66,9 @@ class Field:
                 cell.obj = None
 
     def update(self):
+        self.organisms = 0
+        self.foods = 0
+        self.predators = 0
         self.surface.fill(FIELD_COLOR)
         for row in self._rows:
             for cell in row:
@@ -71,6 +77,12 @@ class Field:
         for row in self._rows:
             for cell in row:
                 cell.set_not_updated()
+                if type(cell.obj) is Organism:
+                    self.organisms += 1
+                    if cell.obj.predator:
+                        self.predators += 1
+                elif type(cell.obj) is Food:
+                    self.foods += 1
                 cell.draw()
 
     def change_border_cells(self, width: int):

@@ -86,7 +86,6 @@ class Organism:
                         not cell.obj.predator and
                         self.finicky <= cell.obj.energy):
                     cells_with_food.append(cell)
-                    print(cell.obj)
                 elif (type(cell.obj) is Food and self.finicky <= cell.obj.energy
                       and not self.predator):
                     cells_with_food.append(cell)

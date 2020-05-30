@@ -7,11 +7,11 @@ from field import Field
 from ui import Widget
 
 FPS = 60
-UPDATE_FREQUENCY = 5
+UPDATE_FREQUENCY = 4
 UI_WIDTH = 200
 MIN_ROWS_COLS = 3
-BUTTON_H = 50
-WINDOW_BACKGROUND = (0, 0, 0)
+WIDGET_HEIGHT = 50
+WINDOW_BACKGROUND = (32, 32, 32)
 BUTTON_COLOR = (72, 72, 72)
 BUTTON_COVER = (64, 64, 64)
 BUTTON_CLICKED = (128, 128, 128)
@@ -41,110 +41,127 @@ class Program:
             Widget(x=0,
                    y=0,
                    width=UI_WIDTH,
-                   height=BUTTON_H,
+                   height=WIDGET_HEIGHT,
                    text='Старт/Стоп',
                    background_color=BUTTON_COLOR,
                    onclick=self.start_stop,
                    background_color_cover=BUTTON_COVER,
                    background_color_click=BUTTON_CLICKED),
             Widget(x=0,
-                   y=BUTTON_H,
+                   y=WIDGET_HEIGHT,
                    width=UI_WIDTH,
-                   height=BUTTON_H,
+                   height=WIDGET_HEIGHT,
                    text='Очистить',
                    onclick=self.clear,
                    background_color=BUTTON_COLOR,
                    background_color_cover=BUTTON_COVER,
                    background_color_click=BUTTON_CLICKED),
             Widget(x=0,
-                   y=BUTTON_H * 2,
+                   y=WIDGET_HEIGHT * 2,
                    width=UI_WIDTH,
-                   height=BUTTON_H,
+                   height=WIDGET_HEIGHT,
                    text='Размер таблицы'),
             Widget(x=0,
-                   y=BUTTON_H * 3,
+                   y=WIDGET_HEIGHT * 3,
                    width=UI_WIDTH // 2,
-                   height=BUTTON_H,
+                   height=WIDGET_HEIGHT,
                    text='-',
                    onclick=lambda: self.change_field('-'),
                    background_color=BUTTON_COLOR,
                    background_color_cover=BUTTON_COVER,
                    background_color_click=BUTTON_CLICKED),
             Widget(x=UI_WIDTH // 2,
-                   y=BUTTON_H * 3,
+                   y=WIDGET_HEIGHT * 3,
                    width=UI_WIDTH // 2,
-                   height=BUTTON_H, text='+',
+                   height=WIDGET_HEIGHT, text='+',
                    onclick=lambda: self.change_field('+'),
                    background_color=BUTTON_COLOR,
                    background_color_cover=BUTTON_COVER,
                    background_color_click=BUTTON_CLICKED),
             Widget(x=0,
-                   y=BUTTON_H * 4,
+                   y=WIDGET_HEIGHT * 4,
                    width=UI_WIDTH // 2,
-                   height=BUTTON_H,
+                   height=WIDGET_HEIGHT,
                    text='-10',
                    onclick=lambda: self.change_field('-', 10),
                    background_color=BUTTON_COLOR,
                    background_color_cover=BUTTON_COVER,
                    background_color_click=BUTTON_CLICKED),
             Widget(x=UI_WIDTH // 2,
-                   y=BUTTON_H * 4,
+                   y=WIDGET_HEIGHT * 4,
                    width=UI_WIDTH // 2,
-                   height=BUTTON_H,
+                   height=WIDGET_HEIGHT,
                    text='+10',
                    onclick=lambda: self.change_field('+', 10),
                    background_color=BUTTON_COLOR,
                    background_color_cover=BUTTON_COVER,
                    background_color_click=BUTTON_CLICKED),
             Widget(x=0,
-                   y=BUTTON_H * 5,
+                   y=WIDGET_HEIGHT * 5,
                    width=UI_WIDTH,
-                   height=BUTTON_H,
+                   height=WIDGET_HEIGHT,
                    text='Частота обновл.'),
             Widget(x=0,
-                   y=BUTTON_H * 6,
+                   y=WIDGET_HEIGHT * 6,
                    width=UI_WIDTH // 2,
-                   height=BUTTON_H,
+                   height=WIDGET_HEIGHT,
                    text='-',
                    onclick=lambda: self.change_update_frequency('+'),
                    background_color=BUTTON_COLOR,
                    background_color_cover=BUTTON_COVER,
                    background_color_click=BUTTON_CLICKED),
             Widget(x=UI_WIDTH // 2,
-                   y=BUTTON_H * 6,
+                   y=WIDGET_HEIGHT * 6,
                    width=UI_WIDTH // 2,
-                   height=BUTTON_H, text='+',
+                   height=WIDGET_HEIGHT, text='+',
                    onclick=lambda: self.change_update_frequency('-'),
                    background_color=BUTTON_COLOR,
                    background_color_cover=BUTTON_COVER,
                    background_color_click=BUTTON_CLICKED),
             Widget(x=0,
-                   y=BUTTON_H * 7,
+                   y=WIDGET_HEIGHT * 7,
                    width=UI_WIDTH,
-                   height=BUTTON_H,
+                   height=WIDGET_HEIGHT,
                    text='Еды за раз'),
             Widget(x=0,
-                   y=BUTTON_H * 8,
+                   y=WIDGET_HEIGHT * 8,
                    width=UI_WIDTH // 2,
-                   height=BUTTON_H,
+                   height=WIDGET_HEIGHT,
                    text='-',
                    onclick=lambda: self.change_food_count('-'),
                    background_color=BUTTON_COLOR,
                    background_color_cover=BUTTON_COVER,
                    background_color_click=BUTTON_CLICKED),
             Widget(x=UI_WIDTH // 2,
-                   y=BUTTON_H * 8,
+                   y=WIDGET_HEIGHT * 8,
                    width=UI_WIDTH // 2,
-                   height=BUTTON_H, text='+',
+                   height=WIDGET_HEIGHT,
+                   text='+',
                    onclick=lambda: self.change_food_count('+'),
                    background_color=BUTTON_COLOR,
                    background_color_cover=BUTTON_COVER,
                    background_color_click=BUTTON_CLICKED),
 
             Widget(x=0,
-                   y=resolution[1] - BUTTON_H,
+                   y=WIDGET_HEIGHT * 9,
                    width=UI_WIDTH,
-                   height=BUTTON_H,
+                   height=WIDGET_HEIGHT,
+                   text='Пищи: 1'),
+            Widget(x=0,
+                   y=WIDGET_HEIGHT * 10,
+                   width=UI_WIDTH,
+                   height=WIDGET_HEIGHT,
+                   text='Организмов: 0'),
+            Widget(x=0,
+                   y=WIDGET_HEIGHT * 11,
+                   width=UI_WIDTH,
+                   height=WIDGET_HEIGHT,
+                   text='Хищников: 0'),
+
+            Widget(x=0,
+                   y=resolution[1] - WIDGET_HEIGHT,
+                   width=UI_WIDTH,
+                   height=WIDGET_HEIGHT,
                    text='Выход',
                    background_color=BUTTON_COLOR,
                    background_color_cover=BUTTON_COVER,
@@ -196,6 +213,11 @@ class Program:
                            count_put_food=self.field.count_put_food)
         self.field.update()
 
+    def update_info(self):
+        self.widgets[-2].text = f'Хищников: {self.field.predators}'
+        self.widgets[-3].text = f'Организмов: {self.field.organisms}'
+        self.widgets[-4].text = f'Пищи: {self.field.foods}'
+
     def main(self):
         while True:
             if not self.update():
@@ -209,20 +231,8 @@ class Program:
         for e in events:
             if e.type == pygame.QUIT:
                 self.next_update = False
-            elif e.type == pygame.KEYUP:
-                if e.key == pygame.K_ESCAPE:
-                    self.next_update = False
-                elif e.key == pygame.K_p:
-                    self.field.put_food(self.field.cols + self.field.rows)
-                    self.field.update()
-                elif e.key == pygame.K_c:
-                    self.clear()
-                elif e.key == pygame.K_o:
-                    self.field.put_live(1)
-                elif e.key == pygame.K_u:
-                    self.field.update()
-                elif e.key == pygame.K_s:
-                    self.start_stop()
+            elif e.type == pygame.KEYUP and e.key == pygame.K_ESCAPE:
+                self.next_update = False
             elif e.type == pygame.MOUSEBUTTONUP:
                 if e.button == 1:
                     pos = pygame.mouse.get_pos()
@@ -230,6 +240,7 @@ class Program:
                         pos = (pos[0] - UI_WIDTH, pos[1])
                         self.field.put_live(1, pos)
                         self.field.update()
+                        self.update_info()
 
         for widget in self.widgets:
             widget.update(events)
@@ -237,6 +248,7 @@ class Program:
         if self.start and not self.update_iterator:
             self.update_iterator = self.update_frequency
             self.field.update()
+            self.update_info()
         if self.update_iterator:
             self.update_iterator -= 1
 
@@ -250,6 +262,10 @@ class Program:
             widget.show(self.window)
         self.field.draw(self.window, (UI_WIDTH, 0))
         pygame.display.update()
+
+
+class Menu:
+    pass
 
 
 if __name__ == '__main__':
