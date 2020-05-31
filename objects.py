@@ -93,10 +93,7 @@ class Organism:
                     empty_cells.append(cell)
         if cells_with_food:
             new_cell = choice(cells_with_food)
-            if self.predator:
-                self.energy += round(new_cell.obj.energy * FOOD_ENERGY_FACTOR)
-            else:
-                self.energy += round(new_cell.obj.energy * FOOD_ENERGY_FACTOR)
+            self.energy += round(new_cell.obj.energy * FOOD_ENERGY_FACTOR)
             self.energy = min(MAX_ENERGY, self.energy)
         elif empty_cells:
             new_cell = choice(empty_cells)
