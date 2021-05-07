@@ -22,7 +22,7 @@ BUTTON_CLICKED = (128, 128, 128)
 class Program:
     """The main class for playing a program"""
 
-    def __init__(self, resolution=(1280, 720),
+    def __init__(self, resolution=(1366, 768),
                  fullscreen=True):
         fullscreen = pygame.FULLSCREEN if fullscreen else 0
         self.resolution = resolution
@@ -163,6 +163,11 @@ class Program:
                    width=UI_WIDTH,
                    height=WIDGET_HEIGHT,
                    text='Хищников: 0'),
+            Widget(x=0,
+                   y=WIDGET_HEIGHT * 12,
+                   width=UI_WIDTH,
+                   height=WIDGET_HEIGHT,
+                   text='Поле: 36x64'),
 
             Widget(x=0,
                    y=resolution[1] - WIDGET_HEIGHT,
@@ -221,9 +226,10 @@ class Program:
         self.field.update()
 
     def update_info(self):
-        self.widgets[-2].text = f'Хищников: {self.field.predators}'
-        self.widgets[-3].text = f'Организмов: {self.field.organisms}'
-        self.widgets[-4].text = f'Пищи: {self.field.foods}'
+        self.widgets[-2].text = f'Поле: {self.rows}x{self.cols}'
+        self.widgets[-3].text = f'Хищников: {self.field.predators}'
+        self.widgets[-4].text = f'Организмов: {self.field.organisms}'
+        self.widgets[-5].text = f'Пищи: {self.field.foods}'
 
     def main(self):
         while True:
