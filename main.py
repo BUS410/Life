@@ -9,7 +9,7 @@ from field import Field
 from ui import Widget
 
 FPS = 60
-UPDATE_FREQUENCY = 4
+UPDATE_FREQUENCY = 0
 UI_WIDTH = 200
 MIN_ROWS_COLS = 3
 WIDGET_HEIGHT = 50
@@ -33,10 +33,10 @@ class Program:
             messagebox.showerror('Ошибка!', e)
             raise e
         pygame.display.set_caption('Life by BUS410')
-        self.cols = resolution[0] // 20
-        self.rows = resolution[1] // 20
+        self.cols = (resolution[0] - UI_WIDTH) // 10
+        self.rows = resolution[1] // 10
         self.field = Field(resolution[0] - UI_WIDTH, resolution[1], self.cols,
-                           self.rows)
+                           self.rows, count_put_food=32)
         self.field.update()
         self.update_iterator = UPDATE_FREQUENCY
         self.update_frequency = UPDATE_FREQUENCY
@@ -196,10 +196,10 @@ class Program:
 
     def change_food_count(self, action):
         if action == '+':
-            self.field.count_put_food += 1
+            self.field.count_put_food += 10
         elif action == '-':
             if self.field.count_put_food > 0:
-                self.field.count_put_food -= 1
+                self.field.count_put_food -= 10
 
     def change_update_frequency(self, action):
         if action == '+':
@@ -295,14 +295,14 @@ class Menu:
             (1366, 768),
             (1920, 1080),
         ]
-        self.current_resolution = 0
+        self.current_resolution = 2
 
         self.widgets = [
             Widget(x=0,
                    y=0,
                    width=self.resolution[0] // 2,
                    height=self.resolution[1] // 3,
-                   text='Разрешение: 1280x720'),
+                   text='Разрешение: 1366x768'),
             Widget(x=self.resolution[0] // 2,
                    y=0,
                    width=self.resolution[0] // 4,
