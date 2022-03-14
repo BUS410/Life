@@ -22,20 +22,14 @@ BUTTON_CLICKED = (128, 128, 128)
 class Program:
     """The main class for playing a program"""
 
-    def __init__(self, resolution=(1366, 768),
-                 fullscreen=True):
-        fullscreen = pygame.FULLSCREEN if fullscreen else 0
-        self.resolution = resolution
-        try:
-            self.window = pygame.display.set_mode(resolution, fullscreen)
-        except Exception as e:
-            Tk().withdraw()
-            messagebox.showerror('Ошибка!', e)
-            raise e
+    def __init__(self):
+        pygame.init()
+        self.window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        self.resolution = self.window.get_width(), self.window.get_height()
         pygame.display.set_caption('Life by BUS410')
-        self.cols = (resolution[0] - UI_WIDTH) // 10
-        self.rows = resolution[1] // 10
-        self.field = Field(resolution[0] - UI_WIDTH, resolution[1], self.cols,
+        self.cols = (self.resolution[0] - UI_WIDTH) // 10
+        self.rows = self.resolution[1] // 10
+        self.field = Field(self.resolution[0] - UI_WIDTH, self.resolution[1], self.cols,
                            self.rows, count_put_food=32)
         self.field.update()
         self.update_iterator = UPDATE_FREQUENCY
@@ -170,7 +164,7 @@ class Program:
                    text='Поле: 36x64'),
 
             Widget(x=0,
-                   y=resolution[1] - WIDGET_HEIGHT,
+                   y=self.resolution[1] - WIDGET_HEIGHT,
                    width=UI_WIDTH,
                    height=WIDGET_HEIGHT,
                    text='Выход',
@@ -277,144 +271,5 @@ class Program:
         pygame.display.update()
 
 
-class Menu:
-
-    def __init__(self):
-        pygame.init()
-        self.resolution = (500, 400)
-        self.window = pygame.display.set_mode(self.resolution)
-        pygame.display.set_caption('Настройка')
-        self.clock = pygame.time.Clock()
-        self.new_update = True
-        self.start_program = False
-
-        self.fullscreen = True
-        self.resolutions = [
-            (1280, 720),
-            (1360, 768),
-            (1366, 768),
-            (1920, 1080),
-        ]
-        self.current_resolution = 2
-
-        self.widgets = [
-            Widget(x=0,
-                   y=0,
-                   width=self.resolution[0] // 2,
-                   height=self.resolution[1] // 3,
-                   text='Разрешение: 1366x768'),
-            Widget(x=self.resolution[0] // 2,
-                   y=0,
-                   width=self.resolution[0] // 4,
-                   height=self.resolution[1] // 3,
-                   text='-',
-                   onclick=lambda: self.change_resolution('-'),
-                   font_size=36,
-                   background_color=BUTTON_COLOR,
-                   background_color_cover=BUTTON_COVER,
-                   background_color_click=BUTTON_CLICKED),
-            Widget(x=self.resolution[0] // 2 + self.resolution[0] // 4,
-                   y=0,
-                   width=self.resolution[0] // 4,
-                   height=self.resolution[1] // 3,
-                   text='+',
-                   onclick=lambda: self.change_resolution('+'),
-                   font_size=36,
-                   background_color=BUTTON_COLOR,
-                   background_color_cover=BUTTON_COVER,
-                   background_color_click=BUTTON_CLICKED),
-
-            Widget(x=0,
-                   y=self.resolution[1] // 3,
-                   width=self.resolution[0] // 2,
-                   height=self.resolution[1] // 3,
-                   text='Полный экран: Вкл.'),
-            Widget(x=self.resolution[0] // 2,
-                   y=self.resolution[1] // 3,
-                   width=self.resolution[0] // 4,
-                   height=self.resolution[1] // 3,
-                   text='-',
-                   font_size=36,
-                   onclick=self.change_fullscreen,
-                   background_color=BUTTON_COLOR,
-                   background_color_cover=BUTTON_COVER,
-                   background_color_click=BUTTON_CLICKED),
-            Widget(x=self.resolution[0] // 2 + self.resolution[0] // 4,
-                   y=self.resolution[1] // 3,
-                   width=self.resolution[0] // 4,
-                   height=self.resolution[1] // 3,
-                   text='+',
-                   font_size=36,
-                   onclick=self.change_fullscreen,
-                   background_color=BUTTON_COLOR,
-                   background_color_cover=BUTTON_COVER,
-                   background_color_click=BUTTON_CLICKED),
-
-            Widget(x=0,
-                   y=(self.resolution[1] // 3) * 2,
-                   width=self.resolution[0],
-                   height=self.resolution[1] // 3,
-                   text='Запустить',
-                   font_size=36,
-                   onclick=self.start,
-                   background_color=BUTTON_COLOR,
-                   background_color_cover=BUTTON_COVER,
-                   background_color_click=BUTTON_CLICKED),
-        ]
-
-    def __call__(self):
-        while True:
-            if not self.update():
-                break
-            self.clock.tick(FPS)
-        return {
-            'resolution': self.resolutions[self.current_resolution],
-            'fullscreen': self.fullscreen,
-            'start': self.start_program,
-        }
-
-    def start(self):
-        self.new_update = False
-        self.start_program = True
-
-    def change_resolution(self, action):
-        if action == '+' and self.current_resolution < len(
-                self.resolutions) - 1:
-            self.current_resolution += 1
-        elif action == '-' and self.current_resolution > 0:
-            self.current_resolution -= 1
-        res = 'x'.join(
-            str(x) for x in self.resolutions[self.current_resolution])
-        self.widgets[0].text = f'Разрешение: {res}'
-
-    def change_fullscreen(self):
-        self.fullscreen = not self.fullscreen
-        mode = 'Вкл.' if self.fullscreen else 'Выкл.'
-        self.widgets[-4].text = f'Полный экран: {mode}'
-
-    def update(self):
-        self.new_update = True
-
-        events = pygame.event.get()
-        for e in events:
-            if e.type == pygame.QUIT:
-                self.new_update = False
-
-        self.window.fill(WINDOW_BACKGROUND)
-
-        for widget in self.widgets:
-            widget.update(events)
-            widget.show(self.window)
-
-        pygame.display.update()
-
-        return self.new_update
-
-
 if __name__ == '__main__':
-    menu = Menu()
-    config = menu()
-
-    if config['start']:
-        Program(resolution=config['resolution'],
-                fullscreen=config['fullscreen']).main()
+    Program().main()
